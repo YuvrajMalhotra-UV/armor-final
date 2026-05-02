@@ -13,6 +13,7 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import CustomCursor from "@/components/CustomCursor";
+import ArmorClaw from "@/components/ArmorClaw";
 
 const Page = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -32,6 +33,7 @@ const Page = () => {
         <CTA />
       </main>
       <Footer />
+      <ArmorClaw />
     </RootLayout>
   );
 };

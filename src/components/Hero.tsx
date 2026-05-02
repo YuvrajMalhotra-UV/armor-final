@@ -59,19 +59,38 @@ const Hero = ({ startTyping }: HeroProps) => {
     { scope: rootRef }
   );
 
-  // Heading typing effect
+  // Heading typing effect (loops)
   useEffect(() => {
     if (!startTyping) return;
     let i = 0;
-    const id = window.setInterval(() => {
-      i += 1;
-      setRogueTyped(ROGUE_TEXT.slice(0, i));
-      if (i >= ROGUE_TEXT.length) {
-        window.clearInterval(id);
-        window.setTimeout(() => setShowCaret(false), 2000);
+    let mode: "typing" | "holding" | "deleting" = "typing";
+    setShowCaret(true);
+    const tick = (): void => {
+      if (mode === "typing") {
+        i += 1;
+        setRogueTyped(ROGUE_TEXT.slice(0, i));
+        if (i >= ROGUE_TEXT.length) {
+          mode = "holding";
+          window.setTimeout(() => {
+            mode = "deleting";
+            tick();
+          }, 1800);
+          return;
+        }
+        window.setTimeout(tick, 90);
+      } else if (mode === "deleting") {
+        i -= 1;
+        setRogueTyped(ROGUE_TEXT.slice(0, i));
+        if (i <= 0) {
+          mode = "typing";
+          window.setTimeout(tick, 500);
+          return;
+        }
+        window.setTimeout(tick, 45);
       }
-    }, 90);
-    return () => window.clearInterval(id);
+    };
+    const startId = window.setTimeout(tick, 200);
+    return () => window.clearTimeout(startId);
   }, [startTyping]);
 
   // Terminal sequential typing
