@@ -162,6 +162,7 @@ const Navbar = () => {
           </a>
         </div>
       </div>
+      {scrolled && <div className="nav-border" aria-hidden />}
     </nav>
   );
 };
