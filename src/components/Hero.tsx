@@ -439,4 +439,29 @@ const Hero = ({ startTyping }: HeroProps) => {
   );
 };
 
+interface HudBracketProps {
+  pos: "tl" | "tr" | "bl" | "br";
+}
+const HudBracket = ({ pos }: HudBracketProps) => {
+  const positions: Record<HudBracketProps["pos"], string> = {
+    tl: "top-24 left-4 md:left-8",
+    tr: "top-24 right-4 md:right-8",
+    bl: "bottom-8 left-4 md:left-8",
+    br: "bottom-8 right-4 md:right-8",
+  };
+  const borders: Record<HudBracketProps["pos"], React.CSSProperties> = {
+    tl: { borderTop: "1.5px solid rgba(224,123,76,0.5)", borderLeft: "1.5px solid rgba(224,123,76,0.5)" },
+    tr: { borderTop: "1.5px solid rgba(224,123,76,0.5)", borderRight: "1.5px solid rgba(224,123,76,0.5)" },
+    bl: { borderBottom: "1.5px solid rgba(224,123,76,0.5)", borderLeft: "1.5px solid rgba(224,123,76,0.5)" },
+    br: { borderBottom: "1.5px solid rgba(224,123,76,0.5)", borderRight: "1.5px solid rgba(224,123,76,0.5)" },
+  };
+  return (
+    <div
+      aria-hidden
+      className={`absolute w-6 h-6 pointer-events-none ${positions[pos]}`}
+      style={borders[pos]}
+    />
+  );
+};
+
 export default Hero;
