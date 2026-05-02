@@ -204,7 +204,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       <CornerBracket position="br" />
 
       {/* Logo + Text container */}
-      <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+      <div className="relative flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
         <div className="relative flex items-center justify-center">
           {/* Sonar ring */}
           <div
@@ -212,8 +212,8 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
             aria-hidden
             className="absolute rounded-full pointer-events-none"
             style={{
-              width: "140px",
-              height: "140px",
+              width: "200px",
+              height: "200px",
               border: "2px solid #E07B4C",
               opacity: 0,
               willChange: "transform, opacity",
@@ -225,9 +225,9 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
             alt="ArmorIQ"
             className="relative"
             style={{
-              width: "140px",
-              height: "140px",
-              filter: "drop-shadow(0 0 20px #E07B4C)",
+              width: "200px",
+              height: "200px",
+              filter: "drop-shadow(0 0 24px #E07B4C)",
               willChange: "transform, opacity",
               opacity: 0,
             }}
@@ -240,21 +240,27 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           className="flex items-center"
           style={{ fontFamily: "var(--font-geist-mono)" }}
         >
-          <span
-            className="text-3xl sm:text-5xl md:text-6xl"
-            style={{
-              color: "#E07B4C",
-              fontWeight: 700,
-              letterSpacing: "0.05em",
-              textShadow: "0 0 18px rgba(224,123,76,0.55)",
-            }}
-          >
-            {LETTERS.slice(0, visibleLetters).join("")}
-          </span>
+          {LETTERS.map((l, i) => (
+            <span
+              key={i}
+              className="inline-block text-5xl sm:text-7xl md:text-8xl"
+              style={{
+                color: "#E07B4C",
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                textShadow: "0 0 20px rgba(224,123,76,0.6)",
+                opacity: i < visibleLetters ? 1 : 0,
+                transform: i < visibleLetters ? "translateY(0) scale(1)" : "translateY(8px) scale(0.85)",
+                transition: "opacity 0.25s ease-out, transform 0.25s ease-out",
+              }}
+            >
+              {l}
+            </span>
+          ))}
           {showCursor && (
             <span
               ref={cursorRef}
-              className="inline-block ml-1 text-3xl sm:text-5xl md:text-6xl"
+              className="inline-block ml-1 text-5xl sm:text-7xl md:text-8xl"
               style={{ color: "#E07B4C", fontWeight: 700 }}
             >
               |
