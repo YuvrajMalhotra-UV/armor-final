@@ -46,12 +46,7 @@
     font-weight: 300;
   }
 
-  /* Hide native cursor on hover-capable devices */
-  @media (hover: hover) and (pointer: fine) {
-    body, a, button, [role="button"] {
-      cursor: none;
-    }
-  }
+  /* Native cursor preserved; custom cursor renders as an accent overlay */
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {

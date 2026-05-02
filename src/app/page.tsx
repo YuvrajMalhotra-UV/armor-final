@@ -22,7 +22,6 @@ const Page = () => {
   return (
     <RootLayout>
       {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
-      <CustomCursor />
       <Navbar />
       <main>
         <Hero startTyping={loaded} />
