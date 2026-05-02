@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import TiltCard from "./TiltCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,7 +33,7 @@ const Platform = () => {
         y: 30, opacity: 0, duration: 0.8, ease: "power3.out",
         scrollTrigger: { trigger: rootRef.current, start: "top 75%" },
       });
-      gsap.from(".platform-card", {
+      gsap.from(".platform-card-wrap", {
         y: 40, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power3.out",
         scrollTrigger: { trigger: ".platform-grid", start: "top 80%" },
       });
@@ -41,11 +42,12 @@ const Platform = () => {
   );
 
   return (
-    <section ref={rootRef} id="platform" className="py-24 md:py-32" style={{ background: "#fff" }}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <section ref={rootRef} id="platform" className="relative py-24 md:py-32 overflow-hidden" style={{ background: "#fff" }}>
+      <div className="absolute inset-0 bg-dot-grid opacity-40 pointer-events-none" aria-hidden />
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
         <div className="max-w-3xl">
           <span className="text-xs uppercase tracking-[0.2em]" style={{ color: "var(--primary)", fontFamily: "var(--font-geist-mono)", fontWeight: 500 }}>
-            The platform
+            <span>$ </span>The platform
           </span>
           <h2 className="platform-heading mt-3 text-3xl md:text-5xl leading-tight tracking-tight text-balance"
             style={{ fontFamily: "var(--font-sunflower)", fontWeight: 700, color: "var(--text-dark)" }}>
@@ -58,29 +60,30 @@ const Platform = () => {
 
         <div className="platform-grid mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {CARDS.map((c) => (
-            <div
-              key={c.title}
-              className="platform-card card-hover group p-7 rounded-2xl"
-              style={{ background: "var(--surface-soft)", border: "1px solid var(--border-soft)" }}
-            >
-              <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-5 transition-transform duration-300 group-hover:scale-110"
-                style={{ background: "#fff", border: "1px solid var(--border-soft)" }}
+            <div key={c.title} className="platform-card-wrap">
+              <TiltCard
+                className="p-7 rounded-2xl group"
+                style={{ background: "var(--surface-soft)", border: "1px solid var(--border-soft)" }}
               >
-                {c.icon}
-              </div>
-              <span
-                className="inline-block px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider mb-3"
-                style={{ background: "rgba(224,123,76,0.12)", color: "var(--primary)", fontFamily: "var(--font-geist-mono)", fontWeight: 500 }}
-              >
-                {c.label}
-              </span>
-              <h3 className="text-lg mb-2" style={{ fontFamily: "var(--font-sunflower)", fontWeight: 700, color: "var(--text-dark)" }}>
-                {c.title}
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-light)" }}>
-                {c.body}
-              </p>
+                <div
+                  className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-5 transition-transform duration-300 group-hover:scale-110"
+                  style={{ background: "#fff", border: "1px solid var(--border-soft)" }}
+                >
+                  {c.icon}
+                </div>
+                <span
+                  className="inline-block px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider mb-3"
+                  style={{ background: "rgba(224,123,76,0.12)", color: "var(--primary)", fontFamily: "var(--font-geist-mono)", fontWeight: 500 }}
+                >
+                  {c.label}
+                </span>
+                <h3 className="text-lg mb-2" style={{ fontFamily: "var(--font-sunflower)", fontWeight: 700, color: "var(--text-dark)" }}>
+                  {c.title}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--text-light)" }}>
+                  {c.body}
+                </p>
+              </TiltCard>
             </div>
           ))}
         </div>

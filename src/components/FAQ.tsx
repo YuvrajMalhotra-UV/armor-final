@@ -39,11 +39,12 @@ const FAQ = () => {
   );
 
   return (
-    <section ref={rootRef} id="faq" className="py-24 md:py-32" style={{ background: "#fff" }}>
-      <div className="max-w-3xl mx-auto px-6 lg:px-10">
+    <section ref={rootRef} id="faq" className="relative py-24 md:py-32 overflow-hidden" style={{ background: "#fff" }}>
+      <div className="absolute inset-0 bg-dot-grid opacity-30 pointer-events-none" aria-hidden />
+      <div className="relative max-w-3xl mx-auto px-6 lg:px-10">
         <div className="text-center mb-14">
           <span className="text-xs uppercase tracking-[0.2em]" style={{ color: "var(--primary)", fontFamily: "var(--font-geist-mono)", fontWeight: 500 }}>
-            FAQ
+            <span>$ </span>FAQ
           </span>
           <h2 className="faq-heading mt-3 text-3xl md:text-5xl leading-tight tracking-tight text-balance"
             style={{ fontFamily: "var(--font-sunflower)", fontWeight: 700, color: "var(--text-dark)" }}>
@@ -78,6 +79,7 @@ interface FAQItemProps {
 const FAQItem = ({ qa, isOpen, onClick }: FAQItemProps) => {
   const answerRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLSpanElement>(null);
+  const [scanKey, setScanKey] = useState<number>(0);
 
   useGSAP(() => {
     const el = answerRef.current;
@@ -86,6 +88,7 @@ const FAQItem = ({ qa, isOpen, onClick }: FAQItemProps) => {
     if (isOpen) {
       gsap.to(el, { height: "auto", opacity: 1, duration: 0.4, ease: "power2.out" });
       gsap.to(icon, { rotate: 45, duration: 0.3, ease: "power2.out" });
+      setScanKey((k) => k + 1);
     } else {
       gsap.to(el, { height: 0, opacity: 0, duration: 0.3, ease: "power2.in" });
       gsap.to(icon, { rotate: 0, duration: 0.3, ease: "power2.out" });
@@ -94,12 +97,13 @@ const FAQItem = ({ qa, isOpen, onClick }: FAQItemProps) => {
 
   return (
     <div
-      className="faq-item rounded-xl overflow-hidden transition-colors"
+      className="faq-item relative rounded-xl overflow-hidden transition-colors"
       style={{
         background: isOpen ? "var(--surface-soft)" : "#fff",
         border: `1px solid ${isOpen ? "var(--primary)" : "var(--border-soft)"}`,
       }}
     >
+      {isOpen && <span key={scanKey} className="faq-scanline" aria-hidden />}
       <button
         type="button"
         onClick={onClick}

@@ -23,19 +23,21 @@ const TrustBar = () => {
         Trusted by teams shipping agents at
       </p>
       <div className="overflow-hidden relative">
-        <div className="flex gap-16 animate-marquee whitespace-nowrap w-max">
+        <div className="flex gap-6 animate-marquee whitespace-nowrap w-max">
           {items.map((c, i) => (
             <span
               key={`${c}-${i}`}
-              className="text-2xl md:text-3xl"
+              className="relative inline-flex items-center px-6 py-2.5 rounded-full text-lg md:text-xl overflow-hidden"
               style={{
                 fontFamily: "var(--font-sunflower)",
                 fontWeight: 700,
-                color: "var(--text-light)",
-                opacity: 0.7,
+                color: "var(--text-medium)",
+                border: "1px solid var(--border-soft)",
+                background: "var(--surface-soft)",
               }}
             >
-              {c}
+              <span className="relative z-10">{c}</span>
+              <span className="absolute inset-0 shimmer pointer-events-none" aria-hidden />
             </span>
           ))}
         </div>

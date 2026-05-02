@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import RootLayout from "./layout";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -10,13 +11,19 @@ import Differentiation from "@/components/Differentiation";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import LoadingScreen from "@/components/LoadingScreen";
+import CustomCursor from "@/components/CustomCursor";
 
 const Page = () => {
+  const [loaded, setLoaded] = useState<boolean>(false);
+
   return (
     <RootLayout>
+      {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
+      <CustomCursor />
       <Navbar />
       <main>
-        <Hero />
+        <Hero startTyping={loaded} />
         <TrustBar />
         <Problem />
         <Platform />

@@ -15,11 +15,11 @@ interface Row {
 }
 
 const ROWS: ReadonlyArray<Row> = [
-  { capability: "Blocks unauthorized tool calls", armoriq: "✓ Pre-execution", guardrails: "Output only", iam: "Static perms" },
-  { capability: "Understands task intent", armoriq: "✓ Cryptographic", guardrails: "—", iam: "—" },
-  { capability: "Stops prompt injection actions", armoriq: "✓ Always", guardrails: "Sometimes", iam: "—" },
-  { capability: "Per-session scope", armoriq: "✓ Dynamic", guardrails: "—", iam: "Role-bound" },
-  { capability: "Tamper-evident audit", armoriq: "✓ Native", guardrails: "Logs only", iam: "Logs only" },
+  { capability: "Blocks unauthorized tool calls", armoriq: "✅ Pre-execution", guardrails: "Output only", iam: "Static perms" },
+  { capability: "Understands task intent", armoriq: "✅ Cryptographic", guardrails: "—", iam: "—" },
+  { capability: "Stops prompt injection actions", armoriq: "✅ Always", guardrails: "Sometimes", iam: "—" },
+  { capability: "Per-session scope", armoriq: "✅ Dynamic", guardrails: "—", iam: "Role-bound" },
+  { capability: "Tamper-evident audit", armoriq: "✅ Native", guardrails: "Logs only", iam: "Logs only" },
 ];
 
 const Differentiation = () => {
@@ -44,11 +44,12 @@ const Differentiation = () => {
   );
 
   return (
-    <section ref={rootRef} id="differentiation" className="py-24 md:py-32" style={{ background: "var(--surface-muted)" }}>
-      <div className="max-w-6xl mx-auto px-6 lg:px-10">
+    <section ref={rootRef} id="differentiation" className="relative py-24 md:py-32 overflow-hidden" style={{ background: "var(--surface-muted)" }}>
+      <div className="absolute inset-0 bg-hex-grid opacity-50 pointer-events-none" aria-hidden />
+      <div className="relative max-w-6xl mx-auto px-6 lg:px-10">
         <div className="max-w-3xl mb-12">
           <span className="text-xs uppercase tracking-[0.2em]" style={{ color: "var(--primary)", fontFamily: "var(--font-geist-mono)", fontWeight: 500 }}>
-            Why ArmorIQ
+            <span>$ </span>Why ArmorIQ
           </span>
           <h2 className="diff-heading mt-3 text-3xl md:text-5xl leading-tight tracking-tight text-balance"
             style={{ fontFamily: "var(--font-sunflower)", fontWeight: 700, color: "var(--text-dark)" }}>
@@ -57,12 +58,19 @@ const Differentiation = () => {
         </div>
 
         <div
-          className="diff-table rounded-2xl overflow-hidden"
+          className="diff-table relative rounded-2xl overflow-hidden"
           style={{ background: "#fff", border: "1px solid var(--border-soft)" }}
         >
+          {/* ArmorIQ column highlight bg */}
+          <div
+            aria-hidden
+            className="absolute top-0 bottom-0 col-armoriq pointer-events-none"
+            style={{ left: "25%", width: "25%" }}
+          />
+
           {/* header */}
           <div
-            className="grid grid-cols-4 px-4 md:px-6 py-4 text-xs uppercase tracking-wider"
+            className="relative grid grid-cols-4 px-4 md:px-6 py-4 text-xs uppercase tracking-wider"
             style={{ borderBottom: "1px solid var(--border-soft)", color: "var(--text-light)", fontFamily: "var(--font-geist-mono)" }}
           >
             <div>Capability</div>
@@ -74,13 +82,13 @@ const Differentiation = () => {
           {ROWS.map((row, i) => (
             <div
               key={row.capability}
-              className="diff-row grid grid-cols-4 px-4 md:px-6 py-4 md:py-5 items-center text-sm"
+              className="diff-row relative grid grid-cols-4 px-4 md:px-6 py-4 md:py-5 items-center text-sm"
               style={{ borderBottom: i === ROWS.length - 1 ? "none" : "1px solid var(--border-soft)" }}
             >
               <div className="pr-2" style={{ color: "var(--text-dark)", fontWeight: 500 }}>{row.capability}</div>
               <div
-                className="text-center py-2 rounded-lg mx-1"
-                style={{ background: "rgba(224,123,76,0.1)", color: "var(--primary)", fontWeight: 500, fontFamily: "var(--font-geist-mono)" }}
+                className="text-center py-2 rounded-lg mx-1 pulse-green"
+                style={{ fontWeight: 600, fontFamily: "var(--font-geist-mono)" }}
               >
                 {row.armoriq}
               </div>
