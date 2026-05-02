@@ -84,7 +84,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 md:h-20 flex items-center justify-between">
         <a
           href="#"
-          className="flex items-center gap-2 text-xl md:text-2xl"
+          className="flex items-center gap-3 text-xl md:text-2xl"
           style={{ fontFamily: "var(--font-sunflower)", fontWeight: 700, color: "var(--primary)" }}
         >
           <span
@@ -94,7 +94,12 @@ const Navbar = () => {
           >
             ◈
           </span>
-          ArmorIQ
+          <span>ArmorIQ</span>
+          <span className="hidden sm:inline-flex items-center gap-1.5 ml-1 text-[9px] uppercase tracking-[0.2em]"
+            style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text-light)", fontWeight: 500 }}>
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: "#3fbf7f", boxShadow: "0 0 6px #3fbf7f" }} />
+            SYSTEM ACTIVE
+          </span>
         </a>
 
         <div className="hidden md:flex items-center gap-10">
@@ -112,13 +117,8 @@ const Navbar = () => {
 
         <a
           href="#cta"
-          className="hidden md:inline-flex items-center px-5 py-2.5 rounded-full text-sm transition-transform duration-200 hover:scale-105"
-          style={{
-            background: "var(--primary)",
-            color: "#fff",
-            fontWeight: 500,
-            boxShadow: "0 8px 20px -8px var(--primary-glow)",
-          }}
+          className="btn-shine btn-pulse hidden md:inline-flex items-center px-5 py-2.5 rounded-full text-sm transition-transform duration-200 hover:scale-105"
+          style={{ background: "var(--primary)", color: "#fff", fontWeight: 500 }}
         >
           Book a Demo →
         </a>
