@@ -231,23 +231,27 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           className="flex items-center"
           style={{ fontFamily: "var(--font-geist-mono)" }}
         >
-          {LETTERS.map((l, i) => (
-            <span
-              key={i}
-              className="inline-block text-5xl sm:text-7xl md:text-8xl"
-              style={{
-                color: "#E07B4C",
-                fontWeight: 700,
-                letterSpacing: "0.04em",
-                textShadow: "0 0 20px rgba(224,123,76,0.6)",
-                opacity: i < visibleLetters ? 1 : 0,
-                transform: i < visibleLetters ? "translateY(0) scale(1)" : "translateY(8px) scale(0.85)",
-                transition: "opacity 0.25s ease-out, transform 0.25s ease-out",
-              }}
-            >
-              {l}
-            </span>
-          ))}
+          {LETTERS.map((l, i) => {
+            const visible = i < visibleLetters;
+            return (
+              <span
+                key={i}
+                className="inline-block text-5xl sm:text-7xl md:text-8xl"
+                style={{
+                  color: "#E07B4C",
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                  textShadow: "0 0 20px rgba(224,123,76,0.6)",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(12px)",
+                  transition: "opacity 180ms ease-out, transform 180ms ease-out",
+                  willChange: "opacity, transform",
+                }}
+              >
+                {l}
+              </span>
+            );
+          })}
           {showCursor && (
             <span
               ref={cursorRef}
