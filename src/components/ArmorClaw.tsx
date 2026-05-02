@@ -255,16 +255,17 @@ const ArmorClaw = () => {
         aria-label="Open ARMOR CLAW chat"
         className="btn-pulse fixed bottom-6 right-6 z-[90] inline-flex items-center gap-2 px-4 py-3 rounded-full transition-transform hover:scale-105"
         style={{
-          background: "var(--primary)",
+          background: "#0a0a0a",
           color: "#fff",
           fontFamily: "var(--font-geist-mono)",
           fontWeight: 600,
           fontSize: "12px",
           letterSpacing: "0.08em",
+          border: "1px solid rgba(224,123,76,0.45)",
           boxShadow: "0 14px 38px -10px rgba(224,123,76,0.55)",
         }}
       >
-        <img src="/armoriq-logo.png" alt="ArmorIQ" className="w-5 h-5 object-contain" />
+        <img src="/armoriq-logo.png" alt="ArmorIQ" className="w-6 h-6 object-contain" />
         <span className="hidden sm:inline">{open ? "CLOSE" : "ARMOR CLAW"}</span>
       </button>
 
