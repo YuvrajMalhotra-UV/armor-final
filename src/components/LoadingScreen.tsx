@@ -101,15 +101,15 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         taglineRef.current,
         { opacity: 0, y: 10 },
         { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
-        3
+        3.2
       );
 
-      // PHASE 5: Progress bar (3.5 → 4s) then fade out
+      // PHASE 5: Progress bar then fade out
       tl.fromTo(
         progressRef.current,
         { width: "0%" },
-        { width: "100%", duration: 0.5, ease: "power1.inOut" },
-        3.5
+        { width: "100%", duration: 0.6, ease: "power1.inOut" },
+        3.7
       );
 
       tl.to(
@@ -123,7 +123,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
             onComplete();
           },
         },
-        4
+        4.4
       );
 
       // Blinking cursor
