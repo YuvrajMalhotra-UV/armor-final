@@ -5,6 +5,7 @@ import RootLayout from "./layout";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
+import HowItWorks from "@/components/HowItWorks";
 import Problem from "@/components/Problem";
 import Platform from "@/components/Platform";
 import Differentiation from "@/components/Differentiation";
@@ -26,6 +27,7 @@ const Page = () => {
       <main>
         <Hero startTyping={loaded} />
         <TrustBar />
+        <HowItWorks />
         <Problem />
         <Platform />
         <Differentiation />
