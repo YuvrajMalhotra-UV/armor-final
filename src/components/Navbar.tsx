@@ -87,14 +87,13 @@ const Navbar = () => {
           className="flex items-center gap-3 text-xl md:text-2xl"
           style={{ fontFamily: "var(--font-sunflower)", fontWeight: 700, color: "var(--primary)" }}
         >
-          <span
-            className="inline-flex items-center justify-center w-8 h-8 rounded-lg"
-            style={{ background: "var(--primary)", color: "#fff" }}
-            aria-hidden
-          >
-            ◈
-          </span>
-          <span>ArmorIQ</span>
+          <img
+            src="/armoriq-logo.png"
+            alt="ArmorIQ"
+            className="w-8 h-8 object-contain"
+            style={{ filter: "drop-shadow(0 0 6px rgba(224,123,76,0.35))" }}
+          />
+          <span className="hidden sm:inline">ArmorIQ</span>
           <span className="hidden sm:inline-flex items-center gap-1.5 ml-1 text-[9px] uppercase tracking-[0.2em]"
             style={{ fontFamily: "var(--font-geist-mono)", color: "var(--text-light)", fontWeight: 500 }}>
             <span className="w-1.5 h-1.5 rounded-full animate-pulse-dot" style={{ background: "#3fbf7f", boxShadow: "0 0 6px #3fbf7f" }} />

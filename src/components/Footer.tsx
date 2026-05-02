@@ -15,10 +15,15 @@ const Footer = () => {
     <footer className="border-t" style={{ background: "var(--surface-soft)", borderColor: "var(--border-soft)" }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
-          <div className="flex items-center gap-2 text-2xl mb-4"
+          <div className="flex items-center gap-3 text-2xl mb-4"
             style={{ fontFamily: "var(--font-sunflower)", fontWeight: 700, color: "var(--primary)" }}>
-            <span className="inline-flex w-8 h-8 items-center justify-center rounded-lg" style={{ background: "var(--primary)", color: "#fff" }}>◈</span>
-            ArmorIQ
+            <img
+              src="/armoriq-logo.png"
+              alt="ArmorIQ"
+              className="w-9 h-9 object-contain"
+              style={{ filter: "drop-shadow(0 0 6px rgba(224,123,76,0.35))" }}
+            />
+            <span>ArmorIQ</span>
           </div>
           <p className="text-sm leading-relaxed max-w-xs" style={{ color: "var(--text-light)" }}>
             It's not about Identity. It's about <span style={{ color: "var(--primary)", fontWeight: 500 }}>Intent.</span>

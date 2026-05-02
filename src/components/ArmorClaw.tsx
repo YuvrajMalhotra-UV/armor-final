@@ -264,7 +264,7 @@ const ArmorClaw = () => {
           boxShadow: "0 14px 38px -10px rgba(224,123,76,0.55)",
         }}
       >
-        <ShieldIcon />
+        <img src="/armoriq-logo.png" alt="ArmorIQ" className="w-5 h-5 object-contain" />
         <span className="hidden sm:inline">{open ? "CLOSE" : "ARMOR CLAW"}</span>
       </button>
 
@@ -299,11 +299,11 @@ const ArmorClaw = () => {
             <span
               className="inline-flex items-center justify-center w-9 h-9 rounded-lg"
               style={{
-                background: "var(--primary)",
-                boxShadow: "0 0 18px rgba(224,123,76,0.55)",
+                background: "rgba(224,123,76,0.12)",
+                boxShadow: "0 0 18px rgba(224,123,76,0.35)",
               }}
             >
-              <ShieldIcon />
+              <img src="/armoriq-logo.png" alt="ArmorIQ" className="w-6 h-6 object-contain" />
             </span>
             <div className="leading-tight">
               <div
@@ -323,7 +323,7 @@ const ArmorClaw = () => {
                   fontFamily: "var(--font-geist-mono)",
                 }}
               >
-                AI Assistant · Online
+                by ArmorIQ
               </div>
             </div>
           </div>

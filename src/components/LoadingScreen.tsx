@@ -15,103 +15,136 @@ interface Particle {
   left: number;
   top: number;
   size: number;
-  color: string;
   delay: number;
   duration: number;
 }
 
-const PARTICLES: ReadonlyArray<Particle> = Array.from({ length: 28 }, (_, i) => ({
+const PARTICLES: ReadonlyArray<Particle> = Array.from({ length: 24 }, (_, i) => ({
   id: i,
   left: Math.random() * 100,
   top: Math.random() * 100,
   size: 1 + Math.random() * 2.5,
-  color: i % 3 === 0 ? "#E07B4C" : "#6B6B6B",
   delay: Math.random() * 3,
   duration: 4 + Math.random() * 5,
 }));
 
 const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
+  const sonarRef = useRef<HTMLDivElement>(null);
+  const textWrapRef = useRef<HTMLDivElement>(null);
   const taglineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
-  const scanlineRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLSpanElement>(null);
+  const [visibleLetters, setVisibleLetters] = useState<number>(0);
+  const [showCursor, setShowCursor] = useState<boolean>(true);
   const [hidden, setHidden] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia("(max-width: 640px)").matches);
+  }, []);
 
   useGSAP(
     () => {
       const tl = gsap.timeline();
 
+      // Corner brackets in
       tl.from(".loader-corner", {
         opacity: 0,
-        scale: 0.6,
+        scale: 0.4,
+        x: (i) => (i % 2 === 0 ? -40 : 40),
+        y: (i) => (i < 2 ? -40 : 40),
         duration: 0.5,
-        stagger: 0.08,
+        stagger: 0.06,
         ease: "power3.out",
       });
 
-      tl.from(
-        ".loader-letter",
-        {
-          opacity: 0,
-          scale: 0.4,
-          y: 16,
-          textShadow: "0 0 0px rgba(224,123,76,0)",
-          duration: 0.5,
-          stagger: 0.13,
-          ease: "back.out(1.6)",
-        },
-        "-=0.2"
+      // PHASE 1: Logo spins in (0 → 1.2s)
+      tl.fromTo(
+        logoRef.current,
+        { opacity: 0, scale: 0.4, rotation: 0 },
+        { opacity: 1, scale: 1.2, rotation: 360, duration: 1.2, ease: "power2.out" },
+        0
       );
 
+      // Sonar ping
+      tl.fromTo(
+        sonarRef.current,
+        { scale: 0.4, opacity: 0.7 },
+        { scale: 3.2, opacity: 0, duration: 1.2, ease: "power2.out", repeat: 1 },
+        0.1
+      );
+
+      // PHASE 2: Logo slides left & shrinks (1.2 → 2s)
       tl.to(
-        ".loader-letter",
+        logoRef.current,
         {
-          textShadow:
-            "0 0 24px rgba(224,123,76,0.85), 0 0 48px rgba(224,123,76,0.4)",
-          duration: 0.4,
-          stagger: 0.05,
+          x: isMobile ? 0 : "-13vw",
+          y: isMobile ? "-40px" : 0,
+          scale: isMobile ? 0.55 : 0.5,
+          rotation: 360,
+          duration: 0.8,
+          ease: "power3.inOut",
         },
-        "-=0.4"
+        1.2
       );
 
-      tl.from(
+      // PHASE 3: Text reveal letter by letter (2 → 3s)
+      tl.call(
+        () => {
+          let i = 0;
+          const id = window.setInterval(() => {
+            i += 1;
+            setVisibleLetters(i);
+            if (i >= LETTERS.length) window.clearInterval(id);
+          }, 80);
+        },
+        [],
+        2
+      );
+
+      // PHASE 4: Hide cursor + tagline in (3 → 3.5s)
+      tl.call(() => setShowCursor(false), [], 3);
+      tl.fromTo(
         taglineRef.current,
-        { opacity: 0, y: 10, duration: 0.6, ease: "power2.out" },
-        "-=0.2"
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        3
       );
 
-      // Progress bar
-      gsap.to(progressRef.current, {
-        width: "100%",
-        duration: 2.6,
-        ease: "power1.inOut",
-      });
+      // PHASE 5: Progress bar (3.5 → 4s) then fade out
+      tl.fromTo(
+        progressRef.current,
+        { width: "0%" },
+        { width: "100%", duration: 0.5, ease: "power1.inOut" },
+        3.5
+      );
 
-      // Scanline loop
-      gsap.to(scanlineRef.current, {
-        y: "100vh",
-        duration: 2.4,
-        repeat: -1,
-        ease: "power1.inOut",
-      });
-
-      // Fade out at 3s
       tl.to(
         rootRef.current,
         {
           opacity: 0,
-          duration: 0.6,
-          delay: 0.4,
+          duration: 0.5,
           ease: "power2.inOut",
           onComplete: () => {
             setHidden(true);
             onComplete();
           },
         },
-        ">"
+        4
       );
+
+      // Blinking cursor
+      gsap.to(cursorRef.current, {
+        opacity: 0,
+        duration: 0.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "steps(1)",
+      });
     },
-    { scope: rootRef }
+    { scope: rootRef, dependencies: [isMobile] }
   );
 
   useEffect(() => {
@@ -126,39 +159,43 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: "#0a0a0a" }}
+      className="fixed inset-0 flex items-center justify-center overflow-hidden"
+      style={{ background: "#0a0a0a", zIndex: 9999 }}
     >
+      {/* Animated grid background */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(224,123,76,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(224,123,76,0.06) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+          maskImage:
+            "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+          animation: "loader-grid-shift 12s linear infinite",
+        }}
+      />
+
       {/* Particles */}
       {PARTICLES.map((p) => (
         <span
           key={p.id}
           aria-hidden
-          className="absolute rounded-full"
+          className="absolute rounded-full pointer-events-none"
           style={{
             left: `${p.left}%`,
             top: `${p.top}%`,
             width: `${p.size}px`,
             height: `${p.size}px`,
-            background: p.color,
-            opacity: 0.35,
+            background: "#E07B4C",
+            opacity: 0.4,
             animation: `loader-float ${p.duration}s ease-in-out ${p.delay}s infinite`,
+            willChange: "transform",
           }}
         />
       ))}
-
-      {/* Scanline */}
-      <div
-        ref={scanlineRef}
-        aria-hidden
-        className="absolute left-0 right-0 h-px pointer-events-none"
-        style={{
-          top: "-2px",
-          background:
-            "linear-gradient(90deg, transparent, rgba(224,123,76,0.85), transparent)",
-          boxShadow: "0 0 12px rgba(224,123,76,0.6)",
-        }}
-      />
 
       {/* Corner brackets */}
       <CornerBracket position="tl" />
@@ -166,30 +203,71 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       <CornerBracket position="bl" />
       <CornerBracket position="br" />
 
-      {/* Letters */}
-      <div
-        className="flex items-center justify-center gap-1 sm:gap-2"
-        style={{ fontFamily: "var(--font-geist-mono)" }}
-      >
-        {LETTERS.map((l, i) => (
+      {/* Logo + Text container */}
+      <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+        <div className="relative flex items-center justify-center">
+          {/* Sonar ring */}
+          <div
+            ref={sonarRef}
+            aria-hidden
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: "140px",
+              height: "140px",
+              border: "2px solid #E07B4C",
+              opacity: 0,
+              willChange: "transform, opacity",
+            }}
+          />
+          <img
+            ref={logoRef}
+            src="/armoriq-logo.png"
+            alt="ArmorIQ"
+            className="relative"
+            style={{
+              width: "140px",
+              height: "140px",
+              filter: "drop-shadow(0 0 20px #E07B4C)",
+              willChange: "transform, opacity",
+              opacity: 0,
+            }}
+          />
+        </div>
+
+        {/* Text */}
+        <div
+          ref={textWrapRef}
+          className="flex items-center"
+          style={{ fontFamily: "var(--font-geist-mono)" }}
+        >
           <span
-            key={i}
-            className="loader-letter inline-block text-4xl sm:text-6xl md:text-7xl"
+            className="text-3xl sm:text-5xl md:text-6xl"
             style={{
               color: "#E07B4C",
               fontWeight: 700,
               letterSpacing: "0.05em",
+              textShadow: "0 0 18px rgba(224,123,76,0.55)",
             }}
           >
-            {l}
+            {LETTERS.slice(0, visibleLetters).join("")}
           </span>
-        ))}
+          {showCursor && (
+            <span
+              ref={cursorRef}
+              className="inline-block ml-1 text-3xl sm:text-5xl md:text-6xl"
+              style={{ color: "#E07B4C", fontWeight: 700 }}
+            >
+              |
+            </span>
+          )}
+        </div>
       </div>
 
+      {/* Tagline */}
       <div
         ref={taglineRef}
-        className="mt-6 text-xs sm:text-sm tracking-[0.3em] uppercase"
-        style={{ color: "#6B6B6B", fontFamily: "var(--font-geist-mono)" }}
+        className="absolute bottom-24 left-0 right-0 text-center text-xs sm:text-sm tracking-[0.3em] uppercase"
+        style={{ color: "#6B6B6B", fontFamily: "var(--font-geist-mono)", opacity: 0 }}
       >
         Control Fabric for Autonomous Agents
       </div>
@@ -204,17 +282,21 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           className="h-full"
           style={{
             width: "0%",
-            background:
-              "linear-gradient(90deg, #E07B4C, #f0a07a, #E07B4C)",
+            background: "linear-gradient(90deg, #E07B4C, #f0a07a, #E07B4C)",
             boxShadow: "0 0 12px rgba(224,123,76,0.7)",
+            willChange: "width",
           }}
         />
       </div>
 
       <style>{`
         @keyframes loader-float {
-          0%, 100% { transform: translate(0, 0); opacity: 0.15; }
-          50% { transform: translate(8px, -12px); opacity: 0.5; }
+          0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+          50% { transform: translate(8px, -12px); opacity: 0.55; }
+        }
+        @keyframes loader-grid-shift {
+          0% { background-position: 0 0, 0 0; }
+          100% { background-position: 48px 48px, 48px 48px; }
         }
       `}</style>
     </div>
@@ -241,7 +323,7 @@ const CornerBracket = ({ position }: CornerBracketProps) => {
   return (
     <div
       aria-hidden
-      className={`loader-corner absolute w-10 h-10 ${positions[position]}`}
+      className={`loader-corner absolute w-12 h-12 ${positions[position]}`}
       style={{ ...borders[position], boxShadow: "0 0 12px rgba(224,123,76,0.4)" }}
     />
   );
