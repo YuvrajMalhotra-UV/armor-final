@@ -90,22 +90,13 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         1.2
       );
 
-      // PHASE 3: Text reveal letter by letter (2 → 3s)
-      tl.call(
-        () => {
-          let i = 0;
-          const id = window.setInterval(() => {
-            i += 1;
-            setVisibleLetters(i);
-            if (i >= LETTERS.length) window.clearInterval(id);
-          }, 80);
-        },
-        [],
-        2
-      );
+      // PHASE 3: Text reveal letter by letter (2 → 3.05s)
+      LETTERS.forEach((_, i) => {
+        tl.call(() => setVisibleLetters(i + 1), [], 2 + i * 0.15);
+      });
 
-      // PHASE 4: Hide cursor + tagline in (3 → 3.5s)
-      tl.call(() => setShowCursor(false), [], 3);
+      // PHASE 4: Hide cursor + tagline in (3.2 → 3.7s)
+      tl.call(() => setShowCursor(false), [], 3.2);
       tl.fromTo(
         taglineRef.current,
         { opacity: 0, y: 10 },
