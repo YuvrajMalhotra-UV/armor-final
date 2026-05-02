@@ -148,6 +148,113 @@ const Hero = ({ startTyping }: HeroProps) => {
         style={{ background: "rgba(224,123,76,0.05)", animationDelay: "-9s" }}
       />
 
+      {/* Orbital scanner ring */}
+      <div
+        aria-hidden
+        className="absolute pointer-events-none hidden md:block"
+        style={{ top: "12%", right: "6%", width: "260px", height: "260px" }}
+      >
+        <div className="absolute inset-0 rounded-full hero-orbit" style={{ border: "1px dashed rgba(224,123,76,0.25)" }} />
+        <div className="absolute inset-6 rounded-full hero-orbit-rev" style={{ border: "1px dashed rgba(224,123,76,0.18)" }} />
+        <div className="absolute inset-12 rounded-full" style={{ border: "1px solid rgba(224,123,76,0.12)" }} />
+        <span className="absolute hero-orbit" style={{ inset: 0 }}>
+          <span className="absolute -top-1 left-1/2 w-2 h-2 rounded-full" style={{ background: "var(--primary)", boxShadow: "0 0 12px var(--primary)" }} />
+        </span>
+      </div>
+
+      {/* Floating code chips */}
+      <div
+        aria-hidden
+        className="absolute hidden lg:flex items-center gap-2 pointer-events-none float-geo"
+        style={{
+          top: "22%", left: "3%",
+          fontFamily: "var(--font-geist-mono)",
+          fontSize: "10px",
+          padding: "6px 10px",
+          borderRadius: "8px",
+          background: "rgba(255,255,255,0.7)",
+          border: "1px solid rgba(224,123,76,0.2)",
+          color: "var(--text-medium)",
+          backdropFilter: "blur(6px)",
+        }}
+      >
+        <span style={{ color: "var(--primary)" }}>policy</span>
+        <span>::</span>
+        <span>verify(intent)</span>
+      </div>
+      <div
+        aria-hidden
+        className="absolute hidden lg:flex items-center gap-2 pointer-events-none float-geo"
+        style={{
+          top: "70%", left: "2%",
+          animationDelay: "-7s",
+          fontFamily: "var(--font-geist-mono)",
+          fontSize: "10px",
+          padding: "6px 10px",
+          borderRadius: "8px",
+          background: "rgba(255,255,255,0.7)",
+          border: "1px solid rgba(224,123,76,0.18)",
+          color: "var(--text-medium)",
+          backdropFilter: "blur(6px)",
+        }}
+      >
+        <span style={{ color: "#3fbf7f" }}>✓</span>
+        <span>tool_call.allowed</span>
+      </div>
+      <div
+        aria-hidden
+        className="absolute hidden lg:flex items-center gap-2 pointer-events-none float-geo"
+        style={{
+          top: "78%", right: "8%",
+          animationDelay: "-12s",
+          fontFamily: "var(--font-geist-mono)",
+          fontSize: "10px",
+          padding: "6px 10px",
+          borderRadius: "8px",
+          background: "rgba(255,255,255,0.7)",
+          border: "1px solid rgba(224,123,76,0.2)",
+          color: "var(--text-medium)",
+          backdropFilter: "blur(6px)",
+        }}
+      >
+        <span style={{ color: "#d94a4a" }}>✕</span>
+        <span>intent.drift_detected</span>
+      </div>
+
+      {/* Binary stream columns */}
+      <div aria-hidden className="absolute top-0 bottom-0 pointer-events-none hidden md:block" style={{ left: "18%", width: "1px" }}>
+        <div className="binary-stream" style={{ animationDelay: "0s" }}>
+          {"10110010 01101001 11001010 01010111 11100100 00110101 10110010 01101001".split(" ").map((b, i) => (
+            <div key={i}>{b}</div>
+          ))}
+        </div>
+      </div>
+      <div aria-hidden className="absolute top-0 bottom-0 pointer-events-none hidden md:block" style={{ right: "26%", width: "1px" }}>
+        <div className="binary-stream" style={{ animationDelay: "-4s", animationDuration: "16s" }}>
+          {"01001011 11010100 00101101 10011001 01110010 11000110 01001011 11010100".split(" ").map((b, i) => (
+            <div key={i}>{b}</div>
+          ))}
+        </div>
+      </div>
+
+      {/* Corner HUD brackets */}
+      <HudBracket pos="tl" />
+      <HudBracket pos="tr" />
+      <HudBracket pos="bl" />
+      <HudBracket pos="br" />
+
+      {/* Crosshair scan target */}
+      <div
+        aria-hidden
+        className="absolute pointer-events-none hidden md:block hero-crosshair"
+        style={{ bottom: "10%", left: "42%", width: "80px", height: "80px" }}
+      >
+        <div className="absolute inset-0 rounded-full" style={{ border: "1px solid rgba(224,123,76,0.35)" }} />
+        <div className="absolute top-1/2 left-0 right-0 h-px" style={{ background: "rgba(224,123,76,0.3)" }} />
+        <div className="absolute left-1/2 top-0 bottom-0 w-px" style={{ background: "rgba(224,123,76,0.3)" }} />
+        <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 rounded-full" style={{ transform: "translate(-50%,-50%)", background: "var(--primary)", boxShadow: "0 0 10px var(--primary)" }} />
+      </div>
+
       <div
         ref={blob1}
         aria-hidden
@@ -329,6 +436,31 @@ const Hero = ({ startTyping }: HeroProps) => {
         </div>
       </div>
     </section>
+  );
+};
+
+interface HudBracketProps {
+  pos: "tl" | "tr" | "bl" | "br";
+}
+const HudBracket = ({ pos }: HudBracketProps) => {
+  const positions: Record<HudBracketProps["pos"], string> = {
+    tl: "top-24 left-4 md:left-8",
+    tr: "top-24 right-4 md:right-8",
+    bl: "bottom-8 left-4 md:left-8",
+    br: "bottom-8 right-4 md:right-8",
+  };
+  const borders: Record<HudBracketProps["pos"], React.CSSProperties> = {
+    tl: { borderTop: "1.5px solid rgba(224,123,76,0.5)", borderLeft: "1.5px solid rgba(224,123,76,0.5)" },
+    tr: { borderTop: "1.5px solid rgba(224,123,76,0.5)", borderRight: "1.5px solid rgba(224,123,76,0.5)" },
+    bl: { borderBottom: "1.5px solid rgba(224,123,76,0.5)", borderLeft: "1.5px solid rgba(224,123,76,0.5)" },
+    br: { borderBottom: "1.5px solid rgba(224,123,76,0.5)", borderRight: "1.5px solid rgba(224,123,76,0.5)" },
+  };
+  return (
+    <div
+      aria-hidden
+      className={`absolute w-6 h-6 pointer-events-none ${positions[pos]}`}
+      style={borders[pos]}
+    />
   );
 };
 
