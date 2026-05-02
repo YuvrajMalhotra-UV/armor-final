@@ -93,12 +93,20 @@ const Hero = ({ startTyping }: HeroProps) => {
     return () => window.clearTimeout(startId);
   }, [startTyping]);
 
-  // Terminal sequential typing
+  // Terminal sequential typing (loops)
   useEffect(() => {
     if (!startTyping) return;
     if (lineIdx >= TERMINAL_LINES.length) {
       const t = window.setTimeout(() => setShowBlocked(true), 350);
-      return () => window.clearTimeout(t);
+      const restart = window.setTimeout(() => {
+        setShowBlocked(false);
+        setLineIdx(0);
+        setLineProgress(0);
+      }, 4500);
+      return () => {
+        window.clearTimeout(t);
+        window.clearTimeout(restart);
+      };
     }
     const current = TERMINAL_LINES[lineIdx].text;
     if (lineProgress < current.length) {
