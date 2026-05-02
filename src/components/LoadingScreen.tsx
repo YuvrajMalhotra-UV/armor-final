@@ -80,9 +80,9 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       tl.to(
         logoRef.current,
         {
-          x: isMobile ? 0 : "-13vw",
-          y: isMobile ? "-40px" : 0,
-          scale: isMobile ? 0.55 : 0.5,
+          x: 0,
+          y: 0,
+          scale: isMobile ? 0.5 : 0.55,
           rotation: 360,
           duration: 0.8,
           ease: "power3.inOut",
