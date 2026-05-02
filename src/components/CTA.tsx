@@ -7,6 +7,22 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+interface CTAParticle {
+  id: number;
+  left: number;
+  duration: number;
+  delay: number;
+  size: number;
+}
+
+const PARTICLES: ReadonlyArray<CTAParticle> = Array.from({ length: 30 }, (_, i) => ({
+  id: i,
+  left: Math.random() * 100,
+  duration: 8 + Math.random() * 10,
+  delay: Math.random() * 8,
+  size: 1 + Math.random() * 2.5,
+}));
+
 const CTA = () => {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +43,6 @@ const CTA = () => {
           className="cta-card relative overflow-hidden rounded-3xl px-8 py-16 md:px-16 md:py-24 bg-cta-gradient text-center"
           style={{ boxShadow: "0 30px 80px -30px rgba(208,106,59,0.5)" }}
         >
-          {/* texture */}
           <div
             className="absolute inset-0 opacity-20 pointer-events-none"
             aria-hidden
@@ -45,6 +60,23 @@ const CTA = () => {
               backgroundSize: "56px 56px",
             }}
           />
+
+          {/* Floating particles */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+            {PARTICLES.map((p) => (
+              <span
+                key={p.id}
+                className="cta-particle"
+                style={{
+                  left: `${p.left}%`,
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  animationDuration: `${p.duration}s`,
+                  animationDelay: `${p.delay}s`,
+                }}
+              />
+            ))}
+          </div>
 
           <div className="relative">
             <span
@@ -68,14 +100,14 @@ const CTA = () => {
             <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="#"
-                className="inline-flex items-center justify-center px-6 py-3.5 rounded-full text-sm transition-transform duration-200 hover:scale-[1.03]"
-                style={{ background: "#fff", color: "var(--primary)", fontWeight: 500 }}
+                className="btn-shine inline-flex items-center justify-center px-6 py-3.5 rounded-full text-sm transition-transform duration-200 hover:scale-[1.03]"
+                style={{ background: "#fff", color: "var(--primary)", fontWeight: 600 }}
               >
                 Book a Demo →
               </a>
               <a
                 href="#"
-                className="inline-flex items-center justify-center px-6 py-3.5 rounded-full text-sm transition-colors"
+                className="btn-shine inline-flex items-center justify-center px-6 py-3.5 rounded-full text-sm transition-colors"
                 style={{ background: "transparent", color: "#fff", fontWeight: 500, border: "1px solid rgba(255,255,255,0.6)" }}
               >
                 Read the docs
